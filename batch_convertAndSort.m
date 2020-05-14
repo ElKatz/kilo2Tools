@@ -9,32 +9,33 @@
 % - make sure you have correct path to kiloTools
 
 %% add necessary paths to toolboxes:
-cd('D:\Code\Toolboxes\kiloTools');
+cd('D:\Code\Toolboxes\kilo2Tools');
 paths = addPathsForSpikeSorting;
-%% boolleans:
 
+%% settings :
+
+% we have gathered here today to:
 performConversion   = true;
 performKiloSort     = true;
 
-%% list of paths to raw ephys files
+% basic options. Please review carefully!
+opts.extractLfp     = true;         % extract LFP from the plx file during conversion and save?
+opts.extractAi      = true;         % extract AI from the plx file during conversion and save?
+opts.fs             = 40000;        % sampling rate of recording
+opts.nCh            = 24;           % number of channels
+opts.Nfilt          = ceil(opts.nCh / 32) * 32 * 3; % number of templates (aka filters) to use (recommendation: 2-4 times more than Nchan, should be a multiple of 32)
+opts.probeGeometry  = 'linear100';  % see probeGeometry2coords.m for options
 
-% LFP:
-opts.extractLfp = true;
-
-% SPKC:
-fs              = 40000;
-nCh             = 24;
-Nfilt           = nCh*3;     % number of clusters to use (2-4 times more than Nchan, should be a multiple of 32)
-
-% set your options:
-probeGeometry                   = 'linear100'; % see probeGeometry2coords.m for options
+% advanced options:
 opts.commonAverageReferencing   = false;
 opts.specificChannels           = false; % either false or (eg) 65:96
 if opts.specificChannels
-    nCh = length(opts.specificChannels);
+    opts.nCh = length(opts.specificChannels);
 end
 opts.plotProbeVoltage           = true;
 opts.removeArtifacts            = false;
+
+%% list of paths to raw ephys files
 
 % input your folders:
 folderList = {...
@@ -68,7 +69,7 @@ for iF = 1:nFiles
     rawFile     = fileList(idxPl2).name;
     rawPath{iF} = fullfile(folderList{iF}, rawFile);
     [~, fileName{iF}]   = fileparts(rawPath{iF});
-    kiloFolderList{iF}  = fullfile(folderList{iF}, 'kiloSorted');
+    kiloFolderList{iF}  = fullfile(folderList{iF}, 'kiloSorted2');
     datPathList{iF}     = fullfile(kiloFolderList{iF}, [fileName{iF} '.dat']);
 end
 
@@ -89,10 +90,10 @@ for iF = 1:nFiles
     
     % kiloSort:
     if performKiloSort
-        copyfile(fullfile(paths.kiloTools, 'masterMegaFile.m') ,kiloFolderList{iF});
+        copyfile(fullfile(paths.kilo2Tools, 'masterMegaFile.m') ,kiloFolderList{iF});
         if exist(datPathList{iF}, 'file')
             cd(kiloFolderList{iF})
-            masterMegaFile(datPathList{iF}, fs, nCh, probeGeometry, Nfilt);
+            masterMegaFile(datPathList{iF}, opts.fs, opts.nCh, opts.probeGeometry, opts.Nfilt);
         end
     end
     

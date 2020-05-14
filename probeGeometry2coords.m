@@ -7,7 +7,18 @@ function [xcoords, ycoords, kcoords] = probeGeometry2coords(probeGeometry, nCh)
 %   probeGeometry - e.g. 'linear50' or 'dualLinear'. see optoins in code.
 %   nCh - number of channles on the probe
 
-    
+if nargin < 1
+    disp('options are:')
+    disp('linear50');
+    disp('linear100');
+    disp('linear125');
+    disp('linear200');
+    disp('stereo');
+    disp('dualLinear');
+    disp('dualLinearMinus1');
+    disp('vprobe50 plus injectrode');
+end
+
 switch probeGeometry
     case 'linear50'
         % linear geometry:
