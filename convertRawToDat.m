@@ -69,11 +69,12 @@ end
 
 % output folder:
 if ~isfield(opts, 'outputFolder')
-    opts.outputFolder = fullfile(rawFolder, 'kiloSorted');
-    if ~exist(opts.outputFolder, 'dir')
-        mkdir(opts.outputFolder);
-    end
+    opts.outputFolder = fullfile(rawFolder, 'kiloSorted2');
 end
+if ~exist(opts.outputFolder, 'dir')
+    mkdir(opts.outputFolder);
+end
+
 
 %% options:
 if ~isfield(opts, 'commonAverageReferencing')

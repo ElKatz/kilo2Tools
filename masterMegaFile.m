@@ -60,6 +60,10 @@ save(fullfile(datFolder, 'chanMap.mat'), ...
     'chanMap','connected', 'xcoords', 'ycoords', 'kcoords', 'chanMap0ind', 'fs', 'probeGeometry')
 
 %% 'standardConfig.m' section:
+
+% lnk: I added this here:
+ops.root                = datFolder; 
+
 % this section is taken from the \configFiles\StandardConfig_MOVEME.m file.
 
 ops.chanMap             = fullfile(datFolder, 'chanMap.mat');
