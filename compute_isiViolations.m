@@ -25,7 +25,9 @@ spike_times = double(spike_times)/params.sample_rate;
 
 fprintf(1, 'computing ISI violations\n');
 
+
 clusterIDs  = unique(spike_clusters);
+
 isiV_fpRate = zeros(numel(clusterIDs),1);
 isiV_rate   = zeros(numel(clusterIDs),1);
 

@@ -1,4 +1,4 @@
-function su = sp2su(sp, ksDir)
+function su = sp2su(sp, ksDir, varargin)
 %   su = sp2su(sp, ksDir)
 %
 % converts the session-level 'sp' struct into a structarray for single
@@ -12,7 +12,12 @@ function su = sp2su(sp, ksDir)
 % OUTPUT:
 %   su - the 'su' stuct with unit-specific data. 
 
+%% defaults: 
+p = inputParser;
+p.addOptional('waves', false);
+p.parse(varargin{:});
 
+%%
 disp('Converting ''sp'' struct into single-unit struct ''su'':...')
 % number of single units:
 nSus = numel(sp.clusterId);
@@ -27,20 +32,10 @@ for iS = 1:nSus
     su(iS).clusterScore     = sp.clusterScore(iS);
     su(iS).uQ               = sp.uQ(iS);
     su(iS).cR               = sp.cR(iS);
-    su(iS).sp.isiV_fpRate   = sp.isiV_fpRate(iS);
-    su(iS).sp.isiV_rate     = sp.isiV_rate(iS);
-    if ~isempty(sp.wf)
-        su(iS).wf           = squeeze(sp.wf(:, :, spikeIdx));
-    else
-        su(iS).wf           = [];
-    end
+    su(iS).isiV_fpRate      = sp.isiV_fpRate(iS);
+    su(iS).isiV_rate        = sp.isiV_rate(iS);
     su(iS).peakCh           = sp.peakCh(iS);
     su(iS).medWfOnPeakCh    = sp.medWfOnPeakCh(iS,:);
-%     su(iS).medWfPerChannel  = squeeze(sp.medWfs(iS,:,:))';
-%     medWfAmpPerChannel      = max(su(iS).medWfPerChannel) - min(su(iS).medWfPerChannel);
-%     su(iS).medWfPeakChannel             = find(medWfAmpPerChannel == max(medWfAmpPerChannel), 1);
-%     su(iS).medWfOnPeak     = su(iS).medWfPerChannel(:, su(iS).medWfPeakChannel);
-% %     su(iS).medWfOnPeak     = median(squeeze(su(iS).wf(peakChannel, :, :)),2);
     [a,b,c]             = fileparts(sp.info.ksDir);
     su(iS).info.dsn     = b;
     su(iS).info.ksDir   = ksDir; 
@@ -48,12 +43,17 @@ for iS = 1:nSus
     su(iS).info.meta    = 'kiloSort';
 end
 
-disp('Done!')
-
-%% save su
+% save su
 if exist('ksDir', 'var')
     save(fullfile(ksDir, 'su.mat'), 'su')
     disp('Done saving ''su''')
 else
     disp('no ''ksDir'' provided as input so I''m not saving nada')
 end
+
+%%
+
+
+
+
+

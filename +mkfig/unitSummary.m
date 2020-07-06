@@ -140,15 +140,15 @@ for iU = idxSort
         yPosStart = yPosStart+0.2;
     end
     if isfield(thisUnit, 'cR')
-        text(0.1, 0.7, ['cR = ', sprintf('%.3f', thisUnit.cR)]);
+        text(0.1, yPosStart, ['cR = ', sprintf('%.2f', thisUnit.cR)]);
         yPosStart = yPosStart+0.2;
     end
-    if isfield(thisUnit, 'isiV')
-        text(0.1, 0.5, ['isiV = ', sprintf('%.3f', thisUnit.isiV)]);
+    if isfield(thisUnit, 'isiV_rate')
+        text(0.1, yPosStart, ['isiV = ', sprintf('%.2f', thisUnit.isiV_rate)]);
         yPosStart = yPosStart+0.2;
     end
-    if isfield(thisUnit, 'isolation')
-        text(0.1, 0.5, ['isolation = ', sprintf('%.2f', thisUnit.isolation)]);
+    if isfield(thisUnit, 'isiV_fpRate')
+        text(0.1, yPosStart, ['fpRate = ', sprintf('%.2f', thisUnit.isiV_fpRate)]);
         yPosStart = yPosStart+0.2;
     end
     
