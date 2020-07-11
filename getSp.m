@@ -266,10 +266,10 @@ if p.Results.waves
     nCh = length(chanMap);
     hWait = waitbar(0, 'Extracting individual waveforms....');
     wf = cell(1, nClu);
+    tic
     for iClu = 1:nClu
         fprintf(1, 'cluster %d (%d/%d)\n', cids(iClu), iClu, nClu);
         theseST = st(clu==cids(iClu));
-        
         nWFsToLoad = length(theseST);
         switch method
             case 'secs'
@@ -277,16 +277,25 @@ if p.Results.waves
             case 'samples'
                 extractST = round(theseST(randperm(length(theseST), nWFsToLoad)));
         end
-        theseWF = zeros(nWFsToLoad, nCh, nWFsamps);
-        for i=1:nWFsToLoad
+        % in case a spike is detected at the very start or end of the
+        % recording its full waveform can't be extracted, so remove it:
+        extractST((extractST - wfWin(1))< 1) = [];
+        extractST((extractST + wfWin(end))> size(mmf.Data.x,2)) = [];
+        nWf = numel(extractST);
+        
+        
+        % get the waveforms:
+        theseWF = zeros(nWf, nCh, nWFsamps);
+        for i=1:nWf
             tempWF = mmf.Data.x(1:nChInFile, extractST(i) + wfWin(1):extractST(i) + wfWin(end));
             theseWF(i,:,:) = tempWF(chanMap+1,:);
         end
         
         wf{iClu}  = theseWF;
         waitbar(iClu/nClu, hWait);
+        disp(toc)
     end
-    save(fullfile(ksDir, 'sp_waveforms.mat'), 'wf', '-v7.3');
+   %  save(fullfile(ksDir, 'sp_waveforms.mat'), 'wf', '-v7.3');
     
     % now extract only waveforms from the peak channel, and save:
     wfOnPeak = cell(1, nClu);

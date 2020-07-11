@@ -7,7 +7,7 @@ end
 
 %% User setup:
 % do you wish to plot individual waveforms behind the mean waveform?
-plotWavesBool = true;
+plotWavesBool = false;
 % set up the number of individual waveforms to plot behind the mean waveform
 nWavesToPlot = 50;
 % set number of bins within which to compute spike count:

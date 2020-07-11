@@ -104,6 +104,7 @@ end
 %% begin conversion:
 
 disp('--------------------------------------------------------------')
+disp(datestr(now));
 fprintf('Performing conversion of %s\n', dsn)
 disp('--------------------------------------------------------------')
 tic
@@ -298,7 +299,7 @@ if opts.removeArtifacts
     disp('Removing artifacts...')
     nCh = size(samples,1);
     % set the standard deviation threshold:
-    sdThresh   = 25;
+    sdThresh   = 30;
     plotBuffer = 10;
     hFigArt = figure;
     nRow = ceil(sqrt(nCh));
