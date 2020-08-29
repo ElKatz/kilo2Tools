@@ -175,7 +175,7 @@ switch rawFileType
         end
         close(hWait)
         
-    case 'pl2' 
+    case 'pl2'
         fullFileName = rawFullPath;
         fileInfo = PL2GetFileIndex(fullFileName);
         
@@ -195,11 +195,11 @@ switch rawFileType
         % which channels are spike continuous?
         spkcChans   = cellfun(@(x) ~isempty(strfind(x, 'SPKC')), adChanNames);
         
-        % with our powers combined.... 
+        % with our powers combined....
         % Get channels that are on, are SPKC, and have samples:
         spkcOnChans = onAdChans & spkcChans & haveSamples;
         
-        % how many enabled SPKC channels do we have? 
+        % how many enabled SPKC channels do we have?
         nChannels = nnz(spkcOnChans);
         
         % names of enabled SPKC channels (this could be converted to an array from
@@ -341,7 +341,6 @@ if opts.removeArtifacts
         formatFig(hFig, [6 12], 'nature')
         saveas(hFig, fullfile(opts.outputFolder, 'probeVoltage_postArtifactRemoval'), 'pdf');
     end
-    
 end
 
 %% write ephys data to dat file:
@@ -391,12 +390,13 @@ end
 % if samples with artifacts were removed, they must also be removed from
 % the time vector:
 if opts.removeArtifacts
-% remove the "bad" samples from timing vector too:
+    % remove the "bad" samples from timing vector too:
     sampsToSecsMap(idxBad) = [];
 end
 
 % save sampsToSecsMap (has to be 7.3 cause these can get BIG):
 save(fullfile(opts.outputFolder, 'sampsToSecsMap.mat'),  'sampsToSecsMap', '-v7.3')
+disp('sampsToSecsMap - saved')
 
 %% extract strobed events:
 % read the strobed word info (values & time stamps):
@@ -408,10 +408,11 @@ switch rawFileType
         strobedEvents.eventInfo = PL2EventTs(rawFullPath, 'Strobed');
         % read the time-stamps of recording start / stop events:
         strobedEvents.startTs = PL2StartStopTs(rawFullPath, 'start');
-        strobedEvents.stopTs = PL2StartStopTs(rawFullPath, 'stop');  
+        strobedEvents.stopTs = PL2StartStopTs(rawFullPath, 'stop');
 end
 % save strobe info:
 save(fullfile(opts.outputFolder, 'strobedEvents.mat'),  'strobedEvents')
+disp('Strobed data - saved')
 
 %% extract analog input channels
 % Analog Inputs (AI) extracted differently in different systems:
@@ -421,7 +422,6 @@ save(fullfile(opts.outputFolder, 'strobedEvents.mat'),  'strobedEvents')
 % newer 'pl2' version, it is from opx-D, while if it is the older
 % 'plx', it is opx-A. This assumption is not bulletproof, so
 % proceed with caution...
-tic
 switch rawFileType
     case 'plx'
         clear ai
@@ -440,7 +440,6 @@ switch rawFileType
         ai(3) = PL2Ad(rawFullPath, 'AI03');
         ai(4) = PL2Ad(rawFullPath, 'AI04');
 end
-toc
 % construct a vector of time (in seconds) that corresponds to the
 % voltages in ai.Values.
 ii = 1; % time is identical for all ai channels so I will run the following code on one of them
@@ -461,6 +460,7 @@ end
 
 % save analog input:
 save(fullfile(opts.outputFolder, 'aiChannels.mat'), 'aiTimeStamps', 'ai', '-v7.3')
+disp('Analog data - saved')
 
 %% extract LfP:
 if opts.extractLfp
@@ -509,6 +509,7 @@ if opts.extractLfp
     
     % save lfp:
     save(fullfile(opts.outputFolder, 'fpChannels.mat'), 'fpTimeStamps', 'fp', '-v7.3')
+    disp('LFP data - saved')
 end
 
 
@@ -540,8 +541,10 @@ end
 
 % save info:
 save(fullfile(opts.outputFolder, 'convertInfo.mat'),  'info');
+disp('info - saved')
 
 %%
+disp('drum roll, please.....')
 fprintf('%f0.1s: CONVERSION COMPLETE!', toc)
 
 dbclear if error
