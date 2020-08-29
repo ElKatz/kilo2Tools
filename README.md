@@ -1,4 +1,6 @@
-# kiloTools
+# README has not been updated. All the below is a lie. TBD
+
+# kilo2Tools
 
 Basic tools for spikesorting ephys data with kiloSort. The repo has a number of functions that take user from raw ephys data to a user friedly(-ish) class 'neuron' of size nNeurons with associated neuron-based methods. 
 
