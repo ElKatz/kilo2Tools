@@ -212,8 +212,9 @@ if p.Results.medWave
     for iS = 1:sp.nClusters
         medWfPerCh              = squeeze(sp.medWfs(iS,:,:))';
         medWfAmpPerCh           = max(medWfPerCh) - min(medWfPerCh);
-        sp.peakCh(iS)           = find(medWfAmpPerCh == max(medWfAmpPerCh), 1);
-        sp.medWfOnPeakCh(iS,:)  = medWfPerCh(:, sp.peakCh(iS));
+        idxPeak(iS)             = find(medWfAmpPerCh == max(medWfAmpPerCh), 1);
+        sp.medWfOnPeakCh(iS,:)  = medWfPerCh(:, idxPeak(iS));
+        sp.peakCh(iS)           = double(chanMap(idxPeak(iS)) + 1); % +1 because chanMap is 0-based
     end
     
     if p.Results.visualize
@@ -300,7 +301,7 @@ if p.Results.waves
     % now extract only waveforms from the peak channel, and save:
     wfOnPeak = cell(1, nClu);
     for iClu = 1:nClu
-        wfOnPeak{iClu} = squeeze(wf{iClu}(:, sp.peakCh(iClu), :));
+        wfOnPeak{iClu} = squeeze(wf{iClu}(:, idxPeak(iClu), :));
     end
     save(fullfile(ksDir, 'sp_waveformsOnPeak.mat'), 'wfOnPeak', '-v7.3');
 end

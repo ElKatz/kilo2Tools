@@ -337,7 +337,7 @@ if opts.removeArtifacts
     if isfield(opts, 'plotProbeVoltage') && opts.plotProbeVoltage
         hFig = figure;
         plot_probeVoltage(samples, 1e3);
-        supertitle([dsn ' - postMeanSubtraction'])
+        supertitle([dsn ' - postArtifactRemoval'])
         formatFig(hFig, [6 12], 'nature')
         saveas(hFig, fullfile(opts.outputFolder, 'probeVoltage_postArtifactRemoval'), 'pdf');
     end

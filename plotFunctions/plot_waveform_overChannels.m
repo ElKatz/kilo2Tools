@@ -8,7 +8,7 @@ chListFlipNeg   = -chListFlip;
 yScaler         = 0.003;
 
 for iS = 1:sp.nClusters
-    ch = sp.peakCh(iS);
+    ch = double(sp.peakCh(iS));
     wf = sp.medWfOnPeakCh(iS,:) .* yScaler;
     wfLength = numel(wf);
     x  = (1:wfLength)  - ceil(wfLength/2);
